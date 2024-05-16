@@ -2,7 +2,18 @@ export default function Question({ num, question, setAnswer }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const answer = e.target.answer.value;
-    setAnswer(answer);
+    if (question === "What is your unweighted GPA?") {
+      const test = parseFloat(answer);
+      if (test && 0 <= test && test <= 4) {
+        setAnswer(answer);
+        e.target.answer.value = "";
+      } else {
+        alert("Stop trolling");
+      }
+    } else {
+      setAnswer(answer);
+      e.target.answer.value = "";
+    }
   };
   return (
     <div className="flex relative">

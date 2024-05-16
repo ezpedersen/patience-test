@@ -1,14 +1,17 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  setDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import Titlebar from "./components/Titlebar";
 import Question from "./components/Question";
 import { useState } from "react";
-import { useEffect } from "react";
-import { set } from "firebase/database";
-
 function App() {
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,31 +36,63 @@ function App() {
   const colRef = collection(db, "opinions");
   const auth = getAuth();
 
-  const [question, setQuestion] = useState("What is your GPA?");
-  const [answer, setAnswer] = useState("");
-  const [num, setNum] = useState(1);
-  useEffect(() => {
-    if (question === "What is your GPA?" && answer !== "") {
+  const [question, setQuestion] = useState("What is your unweighted GPA?");
+  const [num, setNum] = useState(0);
+  const [responses, setResponses] = useState([]);
+  let questions;
+  fetch("/questions.json")
+    .then((response) => response.json())
+    .then((data) => {
+      questions = data;
+    })
+    .catch((error) => {
+      console.error("Error fetching questions:", error);
+    });
+  const [docId, setDocId] = useState();
+  const getAnswer = (a) => {
+    if (question === "What is your unweighted GPA?") {
+      console.log("first question");
       signInAnonymously(auth);
       onAuthStateChanged(auth, (user) => {
         if (user) {
           const uid = user.uid;
-          console.log(uid);
-          addDoc(colRef, {
+          const nnum = num + 1;
+          const nresponses = [
+            { question: "#" + nnum + ". " + question, answer: parseFloat(a) },
+          ];
+          setDoc(doc(db, "opinions", uid), {
             id: uid,
-            gpa: answer,
-            numAnswered: 1,
-            responses: [],
+            gpa: parseFloat(a),
+            numAnswered: nnum,
+            responses: nresponses,
           });
+          setDocId(uid);
+          setNum(nnum);
+          setResponses(nresponses);
+          setQuestion(questions[num]);
         }
       });
+    } else {
+      const nnum = num + 1;
+      const nresponses = [
+        ...responses,
+        { question: "#" + nnum + ". " + question, answer: a },
+      ];
+      updateDoc(doc(db, "opinions", docId), {
+        responses: nresponses,
+        numAnswered: nnum,
+      });
+      setNum(nnum);
+      setResponses(nresponses);
+
+      setQuestion(questions[num]);
     }
-  }, [answer]);
+  };
   return (
     <>
       <Titlebar></Titlebar>
       <div className="flex justify-center items-center h-[calc(100vh-80px)] overflow-auto">
-        <Question num={num} setAnswer={setAnswer} question={question} />
+        <Question num={num + 1} setAnswer={getAnswer} question={question} />
       </div>
     </>
   );
