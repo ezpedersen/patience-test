@@ -90,11 +90,11 @@ function App() {
     }
   };
   return (
-    <>
+    <div className="flex flex-col h-screen bg-gradient-to-b from-blue-500 to-purple-100">
       <Titlebar></Titlebar>
-      <div className="flex justify-center items-center h-[calc(100vh-80px-76px)] overflow-auto">
+      <div className="flex justify-center items-center flex-grow">
         {num === 178 ? (
-          <div className=" bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2">
+          <div className="bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2">
             <h1 className="block mb-5 text-xl font-semibold text-gray-900 mr-4">
               Wow! You answered all of those questions...
             </h1>
@@ -112,7 +112,7 @@ function App() {
         Please take a brief moment to complete this for our AP Statistics
         Project. Thank you!
       </footer>
-    </>
+    </div>
   );
 }
 
