@@ -12,6 +12,7 @@ import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import Titlebar from "./components/Titlebar";
 import Question from "./components/Question";
 import { useState } from "react";
+import { useEffect } from "react";
 function App() {
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -44,6 +45,7 @@ function App() {
     .then((response) => response.json())
     .then((data) => {
       questions = data;
+      console.log(questions.length);
     })
     .catch((error) => {
       console.error("Error fetching questions:", error);
@@ -84,7 +86,6 @@ function App() {
       });
       setNum(nnum);
       setResponses(nresponses);
-
       setQuestion(questions[num]);
     }
   };
@@ -92,7 +93,20 @@ function App() {
     <>
       <Titlebar></Titlebar>
       <div className="flex justify-center items-center h-[calc(100vh-80px)] overflow-auto">
-        <Question num={num + 1} setAnswer={getAnswer} question={question} />
+        {num === 178 ? (
+          <div className=" bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2">
+            <h1 className="block mb-5 text-xl font-semibold text-gray-900 mr-4">
+              Wow! You answered all of those questions...
+            </h1>
+            <p>
+              First person to message eriped235@fusdk12.net on your <br></br>
+              school email with the code "boingo1" gets something idk.
+            </p>
+            <p>your name here ig.</p>
+          </div>
+        ) : (
+          <Question num={num + 1} setAnswer={getAnswer} question={question} />
+        )}
       </div>
     </>
   );
