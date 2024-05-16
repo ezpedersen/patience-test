@@ -1,11 +1,20 @@
-export default function Question() {
+export default function Question({ num, question, setAnswer }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const answer = e.target.answer.value;
+    setAnswer(answer);
+  };
   return (
     <div className="flex relative">
-      <form className="bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2">
+      <form
+        className="bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2"
+        onSubmit={handleSubmit}
+      >
         <h1 className="block mb-5 text-xl font-semibold text-gray-900 mr-4">
-          What's your favorite color?
+          #{num}. {question}
         </h1>
         <input
+          name="answer"
           className="w-full mb-10 text-lg rounded-md border-yellow-950 border-2 p-2"
           required
           placeholder="Answer here"

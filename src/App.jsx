@@ -5,6 +5,10 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import Titlebar from "./components/Titlebar";
 import Question from "./components/Question";
+import { useState } from "react";
+import { useEffect } from "react";
+import { set } from "firebase/database";
+
 function App() {
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -26,20 +30,34 @@ function App() {
   const analytics = getAnalytics(app);
   const db = getFirestore();
 
-  // const colRef = collection(db, "opinions");
-  // const auth = getAuth();
-  // signInAnonymously(auth);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     const uid = user.uid;
-  //     addDoc(colRef, {id: uid, gpa: 3, numAnswered: 1 });
-  //   }
-  // });
+  const colRef = collection(db, "opinions");
+  const auth = getAuth();
+
+  const [question, setQuestion] = useState("What is your GPA?");
+  const [answer, setAnswer] = useState("");
+  const [num, setNum] = useState(1);
+  useEffect(() => {
+    if (question === "What is your GPA?" && answer !== "") {
+      signInAnonymously(auth);
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          console.log(uid);
+          addDoc(colRef, {
+            id: uid,
+            gpa: answer,
+            numAnswered: 1,
+            responses: [],
+          });
+        }
+      });
+    }
+  }, [answer]);
   return (
     <>
       <Titlebar></Titlebar>
       <div className="flex justify-center items-center h-[calc(100vh-80px)] overflow-auto">
-        <Question></Question>
+        <Question num={num} setAnswer={setAnswer} question={question} />
       </div>
     </>
   );
