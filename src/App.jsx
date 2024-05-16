@@ -92,7 +92,7 @@ function App() {
   return (
     <>
       <Titlebar></Titlebar>
-      <div className="flex justify-center items-center h-[calc(100vh-80px)] overflow-auto">
+      <div className="flex justify-center items-center h-[calc(100vh-80px-76px)] overflow-auto">
         {num === 178 ? (
           <div className=" bg-amber-200 p-7 rounded-xl m-10 border-yellow-950 border-2">
             <h1 className="block mb-5 text-xl font-semibold text-gray-900 mr-4">
@@ -108,6 +108,10 @@ function App() {
           <Question num={num + 1} setAnswer={getAnswer} question={question} />
         )}
       </div>
+      <footer className="bg-blue-500 p-6 text-white text-xl font-thin">
+        Please take a brief moment to complete this for our AP Statistics
+        Project. Thank you!
+      </footer>
     </>
   );
 }
