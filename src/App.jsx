@@ -98,10 +98,7 @@ function App() {
             <h1 className="block mb-5 text-xl font-semibold text-gray-900 mr-4">
               Wow! You answered all of those questions...
             </h1>
-            <p>
-              First person to message eriped235@fusdk12.net on your <br></br>
-              school email with the code "boingo1" gets something idk.
-            </p>
+            <p>Lucas Beppu and Ethan Liu were here...</p>
             <p>your name here ig.</p>
           </div>
         ) : (
