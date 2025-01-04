@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy as stats
 
-cred = credentials.Certificate("/Users/kelvinj/Downloads/irvington-opinions-firebase-adminsdk-yk8ai-eb4ffabf81.json")
+cred = credentials.Certificate("./admin-sdk.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
